@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escolha de Pontos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        input[type="text"] {
+            padding: 10px;
+            width: 80%;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .options {
+            display: none;
+            margin-top: 20px;
+        }
+        .option {
+            margin: 10px 0;
+        }
+        .option input {
+            margin-right: 10px;
+        }
+        .people-list {
+            margin-top: 20px;
+        }
+        .category {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Preencha seu nome</h2>
+        <input type="text" id="userName" placeholder="Digite seu nome">
+        <button onclick="proceed()">Continuar</button>
+    </div>
+
+    <div class="options">
+        <h2>Escolha sua categoria</h2>
+        <div class="option">
+            <input type="radio" id="cotas" name="category" value="Cotas">
+            <label for="cotas">Cotas</label>
+        </div>
+        <div class="option">
+            <input type="radio" id="amplaConc" name="category" value="Ampla Concorrência">
+            <label for="amplaConc">Ampla Concorrência</label>
+        </div>
+
+        <h2>Escolha sua faixa de pontos</h2>
+        <div class="option">
+            <input type="radio" id="option1" name="points" value="60 a 63.75 pontos">
+            <label for="option1">60 a 63.75 pontos</label>
+        </div>
+        <div class="option">
+            <input type="radio" id="option2" name="points" value="65 a 68.75 pontos">
+            <label for="option2">65 a 68.75 pontos</label>
+        </div>
+        <div class="option">
+            <input type="radio" id="option3" name="points" value="70 a 73.75 pontos">
+            <label for="option3">70 a 73.75 pontos</label>
+        </div>
+        <div class="option">
+            <input type="radio" id="option4" name="points" value="75 a 78.75 pontos">
+            <label for="option4">75 a 78.75 pontos</label>
+        </div>
+        <div class="option">
+            <input type="radio" id="option5" name="points" value="80 a 83.75 pontos">
+            <label for="option5">80 a 83.75 pontos</label>
+        </div>
+        <div class="option">
+            <input type="radio" id="option6" name="points" value="85 a 100 pontos">
+            <label for="option6">85 a 100 pontos</label>
+        </div>
+        <button onclick="submitChoice()">Enviar</button>
+    </div>
+
+    <div class="people-list">
+        <h2>Pessoas e suas escolhas</h2>
+        <div class="category" id="category1">
+            <h3>60 a 63.75 pontos</h3>
+            <ul id="list1"></ul>
+        </div>
+        <div class="category" id="category2">
+            <h3>65 a 68.75 pontos</h3>
+            <ul id="list2"></ul>
+        </div>
+        <div class="category" id="category3">
+            <h3>70 a 73.75 pontos</h3>
+            <ul id="list3"></ul>
+        </div>
+        <div class="category" id="category4">
+            <h3>75 a 78.75 pontos</h3>
+            <ul id="list4"></ul>
+        </div>
+        <div class="category" id="category5">
+            <h3>80 a 83.75 pontos</h3>
+            <ul id="list5"></ul>
+        </div>
+        <div class="category" id="category6">
+            <h3>85 a 100 pontos</h3>
+            <ul id="list6"></ul>
+        </div>
+    </div>
+
+    <script>
+        // Recuperar lista de usuários do localStorage (se houver)
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+
+        function proceed() {
+            const name = document.getElementById("userName").value;
+            if (name) {
+                document.querySelector(".container").style.display = "none";
+                document.querySelector(".options").style.display = "block";
+            } else {
+                alert("Por favor, insira seu nome.");
+            }
+        }
+
+        function submitChoice() {
+            const name = document.getElementById("userName").value;
+            const selectedCategory = document.querySelector('input[name="category"]:checked');
+            const selectedOption = document.querySelector('input[name="points"]:checked');
+
+            if (selectedCategory && selectedOption) {
+                const userCategory = selectedCategory.value;
+                const userChoice = selectedOption.value;
+                const newUser = { name, category: userCategory, choice: userChoice };
+                users.push(newUser);
+
+                // Salvar a lista de usuários no localStorage
+                localStorage.setItem('users', JSON.stringify(users));
+
+                displayUsers();
+                document.querySelector(".options").style.display = "none";
+                document.querySelector(".container").style.display = "block";
+                document.getElementById("userName").value = ""; // Limpar o nome para o próximo
+            } else {
+                alert("Por favor, selecione a categoria e a faixa de pontos.");
+            }
+        }
+
+        function displayUsers() {
+            // Limpar as listas antes de adicionar os novos
+            const lists = [document.getElementById('list1'), document.getElementById('list2'), document.getElementById('list3'), document.getElementById('list4'), document.getElementById('list5'), document.getElementById('list6')];
+            lists.forEach(list => list.innerHTML = "");
+
+            // Adicionar usuários nas categorias correspondentes
+            users.forEach(user => {
+                const listIndex = getCategoryIndex(user.choice);
+                const list = lists[listIndex];
+                const listItem = document.createElement("li");
+                listItem.textContent = `${user.name} - ${user.category} - ${user.choice}`;
+                list.appendChild(listItem);
+            });
+        }
+
+        function getCategoryIndex(choice) {
+            switch (choice) {
+                case "60 a 63.75 pontos":
+                    return 0;
+                case "65 a 68.75 pontos":
+                    return 1;
+                case "70 a 73.75 pontos":
+                    return 2;
+                case "75 a 78.75 pontos":
+                    return 3;
+                case "80 a 83.75 pontos":
+                    return 4;
+                case "85 a 100 pontos":
+                    return 5;
+                default:
+                    return -1;
+            }
+        }
+
+        // Exibir os usuários ao carregar a página
+        displayUsers();
+    </script>
+
+</body>
+</html>
