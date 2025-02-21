@@ -56,6 +56,9 @@
         .people-list {
             margin-top: 20px;
         }
+        .category {
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -107,11 +110,35 @@
 
     <div class="people-list">
         <h2>Pessoas e suas escolhas</h2>
-        <ul id="peopleList"></ul>
+        <div class="category" id="category1">
+            <h3>60 a 63.75 pontos</h3>
+            <ul id="list1"></ul>
+        </div>
+        <div class="category" id="category2">
+            <h3>65 a 68.75 pontos</h3>
+            <ul id="list2"></ul>
+        </div>
+        <div class="category" id="category3">
+            <h3>70 a 73.75 pontos</h3>
+            <ul id="list3"></ul>
+        </div>
+        <div class="category" id="category4">
+            <h3>75 a 78.75 pontos</h3>
+            <ul id="list4"></ul>
+        </div>
+        <div class="category" id="category5">
+            <h3>80 a 83.75 pontos</h3>
+            <ul id="list5"></ul>
+        </div>
+        <div class="category" id="category6">
+            <h3>85 a 100 pontos</h3>
+            <ul id="list6"></ul>
+        </div>
     </div>
 
     <script>
-        let users = [];
+        // Recuperar lista de usuários do localStorage (se houver)
+        let users = JSON.parse(localStorage.getItem('users')) || [];
 
         function proceed() {
             const name = document.getElementById("userName").value;
@@ -131,27 +158,4 @@
             if (selectedCategory && selectedOption) {
                 const userCategory = selectedCategory.value;
                 const userChoice = selectedOption.value;
-                users.push({ name, category: userCategory, choice: userChoice });
-
-                displayUsers();
-                document.querySelector(".options").style.display = "none";
-                document.querySelector(".container").style.display = "block";
-                document.getElementById("userName").value = ""; // Limpar o nome para o próximo
-            } else {
-                alert("Por favor, selecione a categoria e a faixa de pontos.");
-            }
-        }
-
-        function displayUsers() {
-            const list = document.getElementById("peopleList");
-            list.innerHTML = ""; // Limpa a lista antes de adicionar novamente
-            users.forEach(user => {
-                const listItem = document.createElement("li");
-                listItem.textContent = `${user.name} - ${user.category} - ${user.choice}`;
-                list.appendChild(listItem);
-            });
-        }
-    </script>
-
-</body>
-</html>
+                const newUser = { name, category: us
